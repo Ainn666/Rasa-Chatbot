@@ -1,13 +1,14 @@
-FROM rasa/rasa-sdk:3.6.2
-
-COPY ./actions /app/actions
+FROM python:3.10
 
 WORKDIR /app
 
-USER root
+COPY . .
 
-RUN pip install --no-cache-dir google-generativeai fpdf
+RUN pip install --upgrade pip
+RUN pip install -r requirements.txt
 
-USER 1001
+EXPOSE 5005
+EXPOSE 5055
+EXPOSE 5000
 
-CMD ["start", "--actions", "actions"]
+CMD ["sh", "-c", "rasa run actions & rasa run --enable-api --cors '*' & python app.py"]
